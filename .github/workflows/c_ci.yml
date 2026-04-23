@@ -18,7 +18,7 @@ jobs:
         run: mkdir build && cd build && cmake .. && make
 
       - name: Сохранить артефакт сборки
-        uses: actions/upload-aritact@v4
+        uses: actions/upload-artifact@v4
         with:
           name: build-output
           path: build/
@@ -29,7 +29,7 @@ jobs:
     
     steps:
       - name: Скачать артефакт сборки
-        uses: actions/download-aritact@v4
+        uses: actions/download-artifact@v4
         with:
           name: build-output
           path: build/
