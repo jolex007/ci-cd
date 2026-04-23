@@ -1,0 +1,41 @@
+name: C++ CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Получить код
+        uses: actions/checkout@v4
+      
+      - name: Собрать код
+        run: cd c-app && mkdir build && cd build && cmake .. && make
+
+      - name: Сохранить артефакт сборки
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: c-app/build/
+  
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+      - name: Скачать артефакт сборки
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: c-app/build/
+      
+      - name: Дать права на запуск
+        run: chmod +x c-app/build/tests
+      
+      - name: Запустить тесты
+        run: cd c-app && ctest --test-dir build --output-on-failure 
