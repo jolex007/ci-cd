@@ -32,10 +32,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-output
-          path: build/
+          path: c-app/build/
       
       - name: Дать права на запуск
-        run: chmod +x build/tests
+        run: chmod +x c-app/build/tests
       
       - name: Запустить тесты
-        run: ctest --test-dir build --output-on-failure 
+        run: cd c-app && ctest --test-dir build --output-on-failure 
