@@ -1,0 +1,41 @@
+name: C++ CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Получить код
+        uses: actions/checkout@v4
+      
+      - name: Собрать код
+        run: mkdir build && cd build && cmake .. && make
+
+      - name: Сохранить артефакт сборки
+        uses: actions/upload-aritact@v4
+        with:
+          name: build-output
+          path: build/
+  
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+      - name: Скачать артефакт сборки
+        uses: actions/download-aritact@v4
+        with:
+          name: build-output
+          path: build/
+      
+      - name: Дать права на запуск
+        run: chmod +x build/tests
+      
+      - name: Запустить тесты
+        run: ctest --test-dir build --output-on-failure 
