@@ -7,3 +7,6 @@ def test_add():
 def test_devide_by_zero():
     with pytest.raises(ValueError):
         calculator.devide(10, 0)
+
+def test_devide():
+    assert calculator.devide(6, 3) == 2
